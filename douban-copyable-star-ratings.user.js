@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Douban Copyable Star Ratings
 // @namespace    https://www.douban.com/
-// @version      1.3
+// @version      1.4
 // @description  Copyable personal stars and community ratings.
 // @match        https://book.douban.com/*
 // @match        https://movie.douban.com/*
@@ -24,8 +24,13 @@
 
     const isBookList =
         location.hostname === 'book.douban.com' &&
-        /^\/people\/[^/]+\/(do|wish|collect)\/?$/
-            .test(location.pathname);
+        (
+            /^\/people\/[^/]+\/(do|wish|collect)\/?$/.test(location.pathname) ||
+            (
+                /^\/mine\/?$/.test(location.pathname) &&
+                /^(do|wish|collect)$/.test(new URLSearchParams(location.search).get('status'))
+            )
+        );
 
     // ========================================
     // 1. Original personal star conversion
